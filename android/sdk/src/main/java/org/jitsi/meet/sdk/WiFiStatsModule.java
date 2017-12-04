@@ -23,13 +23,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -141,12 +141,13 @@ class WiFiStatsModule extends ReactContextBaseJavaModule {
                     int signalLevel = WifiManager.calculateSignalLevel(
                         rssi, SIGNAL_LEVEL_SCALE);
 
-                    WritableMap result = Arguments.createMap();
-                    result.putInt("rssi", rssi);
-                    result.putInt("signal", signalLevel);
-                    result.putString("timestamp",
-                            String.valueOf(System.currentTimeMillis()));
-                    WritableArray addresses = Arguments.createArray();
+                    JSONObject result = new JSONObject();
+                    result.put("rssi", rssi)
+                        .put("signal", signalLevel)
+                        .put("timestamp",
+                                String.valueOf(System.currentTimeMillis()));
+
+                    JSONArray addresses = new JSONArray();
 
                     InetAddress wifiAddress
                             = toInetAddress(wifiInfo.getIpAddress());
@@ -178,7 +179,7 @@ class WiFiStatsModule extends ReactContextBaseJavaModule {
                                     if (a.isLinkLocalAddress())
                                         continue;
 
-                                    addresses.pushString(a.getHostAddress());
+                                    addresses.put(a.getHostAddress());
                                 }
                             }
 
@@ -189,9 +190,9 @@ class WiFiStatsModule extends ReactContextBaseJavaModule {
                         );
                     }
 
-                    result.putArray("addresses", addresses);
+                    result.put("addresses", addresses);
 
-                    promise.resolve(result);
+                    promise.resolve(result.toString());
                 } catch (Throwable e) {
                     Log.e(TAG, "Failed to obtain wifi stats", e);
                     promise.reject(
