@@ -120,9 +120,10 @@ class WiFiStatsModule extends ReactContextBaseJavaModule {
             public void run() {
                 try {
 
-                    Context context = getReactApplicationContext()
-                            .getApplicationContext();
-                    WifiManager wifiManager = (WifiManager) context
+                    Context context
+                        = getReactApplicationContext().getApplicationContext();
+                    WifiManager wifiManager
+                        = (WifiManager) context
                             .getSystemService(Context.WIFI_SERVICE);
 
                     if (!wifiManager.isWifiEnabled()) {
@@ -138,8 +139,9 @@ class WiFiStatsModule extends ReactContextBaseJavaModule {
                     }
 
                     int rssi = wifiInfo.getRssi();
-                    int signalLevel = WifiManager.calculateSignalLevel(
-                        rssi, SIGNAL_LEVEL_SCALE);
+                    int signalLevel
+                        = WifiManager.calculateSignalLevel(
+                            rssi, SIGNAL_LEVEL_SCALE);
 
                     JSONObject result = new JSONObject();
                     result.put("rssi", rssi)
@@ -150,7 +152,7 @@ class WiFiStatsModule extends ReactContextBaseJavaModule {
                     JSONArray addresses = new JSONArray();
 
                     InetAddress wifiAddress
-                            = toInetAddress(wifiInfo.getIpAddress());
+                        = toInetAddress(wifiInfo.getIpAddress());
 
                     try {
                         Enumeration<NetworkInterface> e
