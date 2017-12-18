@@ -24,6 +24,7 @@ import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 
 import java.util.Map;
+import java.net.URL;
 
 /**
  * The one and only {@link Activity} that the Jitsi Meet app needs. The
@@ -45,7 +46,20 @@ public class MainActivity extends JitsiMeetActivity {
         // XXX In order to increase (1) awareness of API breakages and (2) API
         // coverage, utilize JitsiMeetViewListener in the Debug configuration of
         // the app.
-        if (BuildConfig.DEBUG && view != null) {
+        if (view != null) {
+            Log.d(
+                "Quicsolv",
+                "Loading url ctsivideo.mvoipctsi.com");
+            try {
+                URL url = new URL("https://ctsivideo.mvoipctsi.com");
+                view.loadURL(url);
+                    Log.d(
+                        "Quicsolv",
+                        "Successfully loaded url ctsivideo.mvoipctsi.com");
+            } catch(Exception e) {
+                Log.e("Quicsolv", "Failed to load url", e);
+            }
+
             view.setListener(new JitsiMeetViewListener() {
                 private void on(String name, Map<String, Object> data) {
                     // Log with the tag "ReactNative" in order to have the log
